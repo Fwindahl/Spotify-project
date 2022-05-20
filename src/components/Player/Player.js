@@ -57,7 +57,7 @@ export default function Player() {
 					}}
 				>
 					<Avatar
-						src="/Justin-Bieber.png"
+						src="/img/Justin-Bieber.png"
 						alt="logo"
 						variant="square"
 						sx={{ width: 56, height: 56, marginRight: 2 }}
