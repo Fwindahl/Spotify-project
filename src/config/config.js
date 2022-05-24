@@ -4,6 +4,8 @@ export const liveURL = 'https://techover-spotify.herokuapp.com/';
 export const devURL = 'http://localhost:3000/';
 export const redirectURL = devURL;
 export const scopes = [
+	'playlist-read-private',
+	'playlist-read-collaborative',
 	'user-read-currently-playing',
 	'user-read-recently-played',
 	'user-read-playback-state',
