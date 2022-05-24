@@ -6,3 +6,8 @@ export const formatTime = (seconds) => {
 	return `${min}:${restSeconds}`;
 };
 // 3:00
+
+export const getAccessToken = () => {
+	const params = new URLSearchParams(window.location.hash.replace('#', '?'));
+	return params.get('access_token');
+};
