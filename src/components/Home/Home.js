@@ -5,6 +5,7 @@ const Home = () => {
 	return (
 		<Box
 			sx={{
+				bgcolor: 'background.paper',
 				flex: 1,
 				display: 'flex',
 				justifyContent: 'center',

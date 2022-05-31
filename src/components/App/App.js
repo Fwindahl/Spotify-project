@@ -10,96 +10,11 @@ import Home from '../Home/Home';
 import Login from '../Login/Login';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
-import SpotifyWebApi from 'spotify-web-api-node';
 import { fetchUser, fetchPlaylist } from '../../store/actions/index';
+import { style } from '@mui/system';
 
-const mockData = [
-	{ name: 'Rock', playlistId: 123, image: '/Justin-Bieber.png' },
-	{ name: 'Pop', playlistId: 646, image: '/Justin-Bieber.png' },
-	{ name: 'Hip hop', playlistId: 834, image: '/Justin-Bieber.png' },
-	{ name: 'X-mas', playlistId: 5503, image: '/Justin-Bieber.png' },
-	{ name: 'Code life', playlistId: 4832, image: '/Justin-Bieber.png' }
-];
-
-const songs = [
-	{
-		image: '/img/Justin-Bieber.png',
-		title: 'Holy',
-		artist: 'Justin Bieber',
-		album: 'No clue',
-		duration: 180
-	},
-	{
-		image: '/img/Justin-Bieber.png',
-		title: 'Holy',
-		artist: 'Justin Bieber',
-		album: 'No clue',
-		duration: 180
-	},
-	{
-		image: '/img/Justin-Bieber.png',
-		title: 'Holy',
-		artist: 'Justin Bieber',
-		album: 'No clue',
-		duration: 180
-	},
-	{
-		image: '/img/Justin-Bieber.png',
-		title: 'Holy',
-		artist: 'Justin Bieber',
-		album: 'No clue',
-		duration: 180
-	},
-	{
-		image: '/img/Justin-Bieber.png',
-		title: 'Holy',
-		artist: 'Justin Bieber',
-		album: 'No clue',
-		duration: 180
-	},
-	{
-		image: '/img/Justin-Bieber.png',
-		title: 'Holy',
-		artist: 'Justin Bieber',
-		album: 'No clue',
-		duration: 180
-	},
-	{
-		image: '/img/Justin-Bieber.png',
-		title: 'Holy',
-		artist: 'Justin Bieber',
-		album: 'No clue',
-		duration: 180
-	},
-	{
-		image: '/img/Justin-Bieber.png',
-		title: 'Holy',
-		artist: 'Justin Bieber',
-		album: 'No clue',
-		duration: 180
-	},
-	{
-		image: '/img/Justin-Bieber.png',
-		title: 'Holy',
-		artist: 'Justin Bieber',
-		album: 'No clue',
-		duration: 180
-	},
-	{
-		image: '/img/Justin-Bieber.png',
-		title: 'Holy',
-		artist: 'Justin Bieber',
-		album: 'No clue',
-		duration: 180
-	}
-];
-
-function App({ token, fetchUser, fetchPlaylist }) {
-	const spotifyApi = new SpotifyWebApi();
-
+function App({ token, fetchUser, fetchPlaylist, spotifyApi }) {
 	useEffect(() => {
-		spotifyApi.setAccessToken(token);
-
 		const getData = async () => {
 			fetchUser(spotifyApi);
 			fetchPlaylist(spotifyApi);
@@ -120,11 +35,11 @@ function App({ token, fetchUser, fetchPlaylist }) {
 					}}
 				>
 					<Box sx={{ flex: 1, overflowY: 'auto', display: 'flex' }}>
-						<SideNav playlists={mockData} />
+						<SideNav />
 						<Routes>
-							<Route path="/playlist/:id" element={<Playlist songs={songs} />} />
+							<Route path="/playlist/:id" element={<Playlist spotifyApi={spotifyApi} />} />
 							<Route path="/search" element={<h1 style={{ color: 'white' }}>Search</h1>} />
-							<Route path="/library" element={<Library playlists={mockData} loading={false} />} />
+							<Route path="/library" element={<Library loading={false} />} />
 							<Route path="/" element={<Home />} />
 						</Routes>
 					</Box>
@@ -146,17 +61,20 @@ const Banner = () => {
 		<Box
 			sx={{
 				width: '100%',
-				height: 25,
-				bgcolor: 'primary.main',
+				height: 30,
+				textShadow: '2px 2px 3px #000000',
+				color: 'text.primary',
+				background: 'linear-gradient(180deg, rgba(25,173,127,1) 0%, rgba(18,18,18,1) 100%)',
 				display: 'flex',
 				alignItems: 'center',
 				justifyContent: 'flex-end',
-				fontSize: 14,
+				fontWeight: 'bold',
+				fontSize: 12,
 				boxSizing: 'border-box',
 				paddingRight: '10px'
 			}}
 		>
-			Made with love by Filip Windahl
+			Made with <span style={{ paddingLeft: 4, paddingRight: 4, color: 'red' }}>LOVE</span> by Techover Academy
 		</Box>
 	);
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 import PlaylistItem from '../PlaylistItem/PlaylistItem';
 import { Box, List, Typography } from '@mui/material';
+import { connect } from 'react-redux';
 
 const Library = ({ playlists, loading }) => {
 	const renderPlaylistItems = () => {
@@ -29,4 +30,11 @@ const Library = ({ playlists, loading }) => {
 	);
 };
 
-export default Library;
+const mapState = (state) => {
+	return {
+		playlists: state.playlist.items,
+		loading: state.playlist.loading
+	};
+};
+
+export default connect(mapState)(Library);

@@ -9,8 +9,8 @@ export const themeOptions = createTheme({
 			contrastText: '#ffffff'
 		},
 		background: {
-			default: '#000000',
-			paper: '#121212'
+			default: '#121212',
+			paper: '#1d1d1d'
 		},
 		text: {
 			primary: '#ffffff',

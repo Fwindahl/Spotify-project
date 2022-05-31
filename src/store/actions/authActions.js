@@ -13,11 +13,12 @@ export const fetchTokenFail = (payload) => {
 	return { type: actionTypes.AUTH_FAIL, payload };
 };
 
-export const fetchToken = () => {
+export const fetchToken = (spotifyApi) => {
 	return async (dispatch) => {
 		dispatch(fetchTokenStart());
 		try {
 			const token = getAccessToken();
+			await spotifyApi.setAccessToken(token);
 			dispatch(fetchTokenSuccess(token));
 		} catch (e) {
 			dispatch(fetchTokenFail(e));

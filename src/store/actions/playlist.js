@@ -16,7 +16,7 @@ export const fetchPlaylist = (spotifyApi) => {
 	return async (dispatch) => {
 		dispatch(fetchPlaylistStart());
 		try {
-			const data = await spotifyApi.getUserPlaylists({ limit: 50 });
+			const data = await spotifyApi.getUserPlaylists();
 			dispatch(fetchPlaylistSuccess(data.body.items));
 		} catch (e) {
 			dispatch(fetchPlaylistFail(e));

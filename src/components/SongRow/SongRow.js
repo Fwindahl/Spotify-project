@@ -16,7 +16,7 @@ const SongRow = ({ image, title, artist, album, duration, i }) => {
 			}}
 		>
 			<Grid item sx={{ width: 35, display: 'flex', alignItems: 'center', fontSize: 16 }}>
-				{i + 1}
+				{i + 1} .
 			</Grid>
 			<Grid item sx={{ flex: 1, display: 'flex', alignItems: 'center', gap: 2 }}>
 				<Avatar src={image} alt={title} variant="square" />

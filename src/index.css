@@ -13,6 +13,7 @@ body,
 
 body {
 	background-color: #121212;
+	overflow: hidden;
 }
 /* ===== Scrollbar CSS ===== */
 /* Firefox */
@@ -23,7 +24,7 @@ body {
 
 /* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
-	width: 12px;
+	width: 2px;
 }
 
 *::-webkit-scrollbar-track {
@@ -31,10 +32,13 @@ body {
 }
 
 *::-webkit-scrollbar-thumb {
-	background-color: #ffffff40;
+	background-color: rgba(11, 165, 111, 0.832);
 }
 
 *::-webkit-scrollbar-thumb:hover,
 *::-webkit-scrollbar-thumb:active {
 	background-color: #ffffff60;
+}
+.App {
+	color: 'pink';
 }
