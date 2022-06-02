@@ -12,7 +12,6 @@ const Playlist = ({ spotifyApi, loading }) => {
 	useEffect(() => {
 		const getData = async () => {
 			const playlistDetail = await spotifyApi.getPlaylist(id);
-			console.log({ playlistDetail });
 			setPlaylistInfo({
 				image: playlistDetail.body.images[0].url,
 				name: playlistDetail.body.name
@@ -31,7 +30,6 @@ const Playlist = ({ spotifyApi, loading }) => {
 			const { track } = song;
 			track.contextUri = `spotify:playlist:${id}`;
 			track.position = i;
-			console.log(track);
 			return track;
 		});
 	};
@@ -60,7 +58,7 @@ const Playlist = ({ spotifyApi, loading }) => {
 				<Avatar
 					src={playlistInfo?.image}
 					variant="square"
-					alt=""
+					alt="Bieber"
 					sx={{
 						boxShadow: 15,
 						width: { sx: '100%', md: 235 },
@@ -85,7 +83,7 @@ const Playlist = ({ spotifyApi, loading }) => {
 					</Typography>
 				</Box>
 			</Box>
-			<SongTable songs={songs} />
+			<SongTable songs={songs} loading={loading} spotifyApi={spotifyApi} />
 		</Box>
 	);
 };

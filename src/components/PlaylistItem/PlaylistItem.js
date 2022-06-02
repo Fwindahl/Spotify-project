@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListItem, ListItemButton, ListItemAvatar, Box, Avatar, ListItemText, Skeleton } from '@mui/material';
+import { ListItem, ListItemButton, ListItemAvatar, Avatar, ListItemText, Skeleton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const PlaylistItem = ({ name, images, id, loading }) => {
@@ -22,7 +22,7 @@ const PlaylistItem = ({ name, images, id, loading }) => {
 		<ListItem disablePadding>
 			<ListItemButton onClick={() => navigate(`/playlist/${id}`)}>
 				<ListItemAvatar sx={{ marginRight: '16px' }}>
-					<Avatar src={images?.[0]?.url} variant="rounded" width={60} height={60} />
+					<Avatar src={images?.[0]?.url} variant="square" width={60} height={60} />
 				</ListItemAvatar>
 				<ListItemText primary={name} sx={{ color: 'text.primary' }} />
 			</ListItemButton>

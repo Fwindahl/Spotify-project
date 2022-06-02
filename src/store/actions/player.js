@@ -20,51 +20,119 @@ export const updatePlayerStart = () => {
 	return { type: actionTypes.UPDATE_PLAYER_START };
 };
 
-export const updatePlayerSuccess = (payload) => {
-	return { type: actionTypes.UPDATE_PLAYER_START, payload };
+export const updatePlayerFail = (error) => {
+	return { type: actionTypes.UPDATE_PLAYER_FAIL, payload: error };
 };
 
-export const updatePlayerFail = (error) => {
-	return { type: actionTypes.UPDATE_PLAYER_START, payload: error };
+export const updatePlayerSuccess = (payload) => {
+	return { type: actionTypes.UPDATE_PLAYER_SUCCESS, payload };
 };
-export const playNewSong = (spotifyApi, song) => {
+
+export const playSpecifiedSong = (spotifyApi, song) => {
 	return async (dispatch) => {
 		dispatch(updatePlayerStart());
 		try {
 			await spotifyApi.play(song);
-			const track = await getMyCurrentPlayingTrack(spotifyApi);
+			const { title, image, artist, duration, position } = song;
+			dispatch(
+				updatePlayerSuccess({
+					title,
+					image,
+					artist,
+					duration,
+					position,
+					progress: 0
+				})
+			);
 			dispatch(play());
-			dispatch(updatePlayerSuccess(track));
-		} catch (error) {
-			dispatch(updatePlayerFail(error));
+		} catch (e) {
+			dispatch(updatePlayerFail(e));
 		}
 	};
 };
 
-// Updatera palyer komponenten med bild text och progress
+export const playNewSong = (spotifyApi, song = {}) => {
+	return async (dispatch) => {
+		dispatch(updatePlayerStart());
+		try {
+			await spotifyApi.play(song);
+			dispatch(play());
+			setTimeout(async () => {
+				const data = await getMyCurrentPlayingTrack(spotifyApi);
+				dispatch(updatePlayerSuccess(data));
+			}, 1000);
+		} catch (e) {
+			dispatch(updatePlayerFail(e));
+		}
+	};
+};
+
 export const updateSongInfo = (spotifyApi) => {
 	return async (dispatch) => {
 		dispatch(updatePlayerStart());
 		try {
-			const track = await getMyCurrentPlayingTrack(spotifyApi);
-			dispatch(updatePlayerSuccess(track));
+			const song = await getMyCurrentPlayingTrack(spotifyApi);
+			dispatch(updatePlayerSuccess(song));
 		} catch (error) {
 			dispatch(updatePlayerFail(error));
 		}
 	};
 };
 
-// Det här är inte en action
+export const updateSongInfoStart = (spotifyApi) => {
+	return async (dispatch, getState) => {
+		dispatch(updatePlayerStart());
+		try {
+			const state = getState();
+			const { device_id } = state.player;
+			const playback = await spotifyApi.getMyCurrentPlaybackState();
+
+			//   Check if a device is playing music right now
+			if (playback.body && playback.body.is_playing) {
+				await spotifyApi.transferMyPlayback([device_id], true);
+				pause();
+				dispatch(updateSongInfo(spotifyApi));
+			} else {
+				await spotifyApi.transferMyPlayback([device_id], false);
+				const currentSong = await spotifyApi.getMyCurrentPlayingTrack();
+				if (currentSong.body) {
+					dispatch(updateSongInfo(spotifyApi));
+				} else {
+					const id = setInterval(async () => {
+						const currentSong = await spotifyApi.getMyCurrentPlayingTrack();
+						if (currentSong.body) {
+							clearInterval(id);
+							dispatch(updateSongInfo(spotifyApi));
+						}
+					}, 500);
+				}
+			}
+		} catch (error) {
+			dispatch(updatePlayerFail(error));
+		}
+	};
+};
+
 const getMyCurrentPlayingTrack = async (spotifyApi) => {
 	const currentSong = await spotifyApi.getMyCurrentPlayingTrack();
-	const { item } = currentSong.body;
+	const item = currentSong.body.item;
 	const duration = item.duration_ms / 1000;
 	const progress = currentSong.body.progress_ms / 1000;
 	return {
-		title: item.title,
-		Image: item.album.images[1],
+		title: item.name,
+		image: item.album.images[1],
 		artist: item.artists[0].name,
 		duration,
 		progress
+	};
+};
+
+const formatSongInfo = (item, progress_ms) => {
+	return {
+		title: item.name,
+		image: item.album.images[1],
+		artist: item.artists[0].name,
+		duration: item.duration_ms / 1000,
+		progress: progress_ms / 1000
 	};
 };

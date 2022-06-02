@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const NavPlaylist = ({ name, id, loading }) => {
 	return (
-		<Link to={loading ? '' : `/playlist/${id}`}>
+		<Link to={loading ? '' : `/playlist/${id}`} style={{ textDecoration: 'none' }}>
 			<Box
 				px={3}
 				py={1}

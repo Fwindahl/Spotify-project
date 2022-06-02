@@ -1,9 +1,9 @@
 import { createStore, compose, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
-import playlistReducer from './reducers/playlistReducer';
 import authReducer from './reducers/authReducer';
-import playerReducer from './reducers/playerReducer';
+import playlistReducer from './reducers/playlistReducer';
 import * as actions from './actions/index';
+import playerReducer from './reducers/playerReducer';
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
