@@ -1,5 +1,13 @@
 import * as actionTypes from './actionTypes';
 
+export const openOverlay = () => {
+	return { type: actionTypes.OPEN_OVERLAY };
+};
+
+export const closeOverlay = () => {
+	return { type: actionTypes.CLOSE_OVERLAY };
+};
+
 export const addDevice = (device_id) => {
 	return { type: actionTypes.ADD_DEVICE_ID, payload: device_id };
 };

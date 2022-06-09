@@ -11,6 +11,7 @@ import Login from '../Login/Login';
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { fetchUser, fetchPlaylist, addDevice } from '../../store/actions/index';
+import Search from '../Search/Search';
 
 function App({ token, fetchUser, fetchPlaylist, spotifyApi, addDevice }) {
 	const [playerIsReady, setPlayerIsReady] = useState(false);
@@ -76,7 +77,7 @@ function App({ token, fetchUser, fetchPlaylist, spotifyApi, addDevice }) {
 						<SideNav />
 						<Routes>
 							<Route path="/playlist/:id" element={<Playlist spotifyApi={spotifyApi} />} />
-							<Route path="/search" element={<h1 style={{ color: 'white' }}>Search</h1>} />
+							<Route path="/search" element={<Search spotifyApi={spotifyApi} />} />
 							<Route path="/library" element={<Library loading={false} />} />
 							<Route path="/" element={<Home />} />
 						</Routes>

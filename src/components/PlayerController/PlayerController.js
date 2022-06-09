@@ -19,110 +19,99 @@ const PlayerController = ({
 }) => {
 	const skipStyle = { width: 28, height: 28 };
 
+	useEffect(() => {
+		let intervalId = null;
+		if (playing) {
+			intervalId = setInterval(() => {
+				setProgress(progress + 1);
+			}, 1000);
+		} else if (!playing && progress !== 0) {
+			clearInterval(intervalId);
+		}
+
+		return () => {
+			clearInterval(intervalId);
+		};
+	}, [playing, progress]);
+
 	const togglePlay = async () => {
 		if (loading) return;
 
 		if (!playing) {
+			// Om musiken INTE Spelar
 			try {
-				playNewSong(spotifyApi);
+				playNewSong(spotifyApi, {});
 			} catch (e) {
 				console.error(e);
 			}
 		} else {
+			// Om musiken Spelar
 			pause();
 			await spotifyApi.pause();
 		}
 	};
 
-	const handleOnSkipPrev = async () => {
+	const handleOnSkipPrevious = async () => {
 		if (loading) return;
 		await spotifyApi.skipToPrevious();
-		playNewSong(spotifyApi);
+		playNewSong(spotifyApi, {});
 	};
 
 	const handleOnSkipNext = async () => {
 		if (loading) return;
 		await spotifyApi.skipToNext();
-		playNewSong(spotifyApi);
+		playNewSong(spotifyApi, {});
 	};
 
-	useEffect(() => {
-		let interval = null;
-		if (playing) {
-			interval = setInterval(() => {
-				setProgress(progress + 1);
-			}, 1000);
-		} else if (!playing && progress !== 0) {
-			clearInterval(interval);
-		}
-		return () => {
-			clearInterval(interval);
-		};
-	}, [playing, progress]);
+	const handleOnChange = (event, value) => {
+		setProgress(value);
+	};
 
-	const handleOnChange = (e, v) => {
-		setProgress(v);
+	const handleOnChangeCommitted = (event, value) => {
+		spotifyApi.seek(value * 1000);
 	};
 
 	return (
-		<Grid
-			item
-			sx={{
-				display: 'flex',
-				flex: 1,
-				justifyContent: { xs: 'flex-end', md: 'center' },
-				alignItems: 'center'
-			}}
-		>
-			<Stack direction="column" spacing={2} justify="center" alignItems="center" sx={{ width: '100%' }}>
-				<Stack spacing={1} direction="row" justifyContent={'center'} alignItems="center" sx={{ width: '100%' }}>
-					<IconButton size="small" sx={{ color: 'text.primary' }} onClick={handleOnSkipPrev}>
-						<SkipPrevious sx={skipStyle} />
-					</IconButton>
-					<IconButton size="small" sx={{ color: 'text.primary' }} onClick={togglePlay}>
-						{playing ? (
-							<Pause sx={{ width: 38, height: 38 }} />
-						) : (
-							<PlayArrow sx={{ width: 38, height: 38 }} />
-						)}
-					</IconButton>
-					<IconButton size="small" sx={{ color: 'text.primary' }} onClick={handleOnSkipNext}>
-						<SkipNext sx={skipStyle} />
-					</IconButton>
-				</Stack>
-				<Stack spacing={2} direction="row" justifyContent={'center'} alignItems="center" sx={{ width: '75%' }}>
-					<Typography variant="body1" sx={{ color: 'text.secondary', fontSize: 12 }}>
-						{formatTime(progress)}
-					</Typography>
-					<Slider
-						min={0}
-						max={duration}
-						sx={sliderStyle}
-						size="medium"
-						value={progress}
-						aria-label="Default"
-						onChange={handleOnChange}
-						onChangeCommitted={(e, v) => spotifyApi.seek(v * 1000)}
-					/>
-					<Typography variant="body1" sx={{ color: 'text.secondary', fontSize: 12 }}>
-						{formatTime(duration)}
-					</Typography>
-				</Stack>
+		<Stack direction="column" spacing={2} justify="center" alignItems="center" sx={{ width: '100%' }}>
+			<Stack spacing={1} direction="row" justifyContent={'center'} alignItems="center" sx={{ width: '100%' }}>
+				<IconButton size="small" sx={{ color: 'text.primary' }} onClick={async () => handleOnSkipPrevious()}>
+					<SkipPrevious sx={skipStyle} />
+				</IconButton>
+				<IconButton size="small" sx={{ color: 'text.primary' }} onClick={async () => togglePlay()}>
+					{playing ? <Pause sx={{ width: 38, height: 38 }} /> : <PlayArrow sx={{ width: 38, height: 38 }} />}
+				</IconButton>
+				<IconButton size="small" sx={{ color: 'text.primary' }} onClick={async () => handleOnSkipNext()}>
+					<SkipNext sx={skipStyle} />
+				</IconButton>
 			</Stack>
-		</Grid>
+			<Stack spacing={2} direction="row" justifyContent={'center'} alignItems="center" sx={{ width: '75%' }}>
+				<Typography variant="body1" sx={{ color: 'text.secondary', fontSize: 12 }}>
+					{formatTime(progress)}
+				</Typography>
+				<Slider
+					min={0}
+					max={duration}
+					sx={sliderStyle}
+					size="medium"
+					value={progress}
+					onChange={handleOnChange}
+					onChangeCommitted={handleOnChangeCommitted}
+				/>
+				<Typography variant="body1" sx={{ color: 'text.secondary', fontSize: 12 }}>
+					{formatTime(duration)}
+				</Typography>
+			</Stack>
+		</Stack>
 	);
 };
 
 const mapState = (state) => {
-	const { title, image, artist, duration, progress, device_id, playing, loading } = state.player;
+	const { playing, duration, progress, device_id, loading } = state.player;
 	return {
-		deviceId: device_id,
 		playing,
-		title,
-		image,
-		artist,
 		duration,
 		progress,
+		deviceId: device_id,
 		loading
 	};
 };
