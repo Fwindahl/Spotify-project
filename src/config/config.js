@@ -1,8 +1,8 @@
 export const authEndpoint = 'https://accounts.spotify.com/authorize';
 export const clientId = '8297cad7fab544b789a9da9acc340cea';
-export const liveURL = 'https://techover-spotify.herokuapp.com/';
+export const liveURL = 'https://windahls-spotify.herokuapp.com/';
 export const devURL = 'http://localhost:3000/';
-export const redirectURL = devURL;
+export const redirectURL = liveURL;
 export const scopes = [
 	'ugc-image-upload',
 	'user-modify-playback-state',
